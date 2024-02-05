@@ -23,19 +23,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser).getBody();
     }
 
-    @GetMapping("/user")@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
-@Table(name = "\"User\"")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
-    private String name;
-    private String email;
-    private String password
-}
+    @GetMapping("/user")
     public List<User> getAllUser() {
         return userService.getAllUser();
     }
