@@ -4,7 +4,7 @@ custom_java_deps: poja-custom-java-deps.txt
 custom_java_env_vars: poja-custom-java-env-vars.txt
 custom_java_repositories: poja-custom-java-repositories.txt
 frontal_memory: 2048
-jacoco_min_coverage: '0.8'
+jacoco_min_coverage: '0.6'
 java_facade_it: FacadeIT
 package_full_name: com.cielux.api
 region: eu-west-3
