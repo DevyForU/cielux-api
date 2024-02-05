@@ -1,0 +1,105 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: cielux-api - Computation and API
+
+Globals:
+  Function:
+    CodeUri: .
+    Runtime: java17
+    Tracing: Active
+    Architectures:
+      - x86_64
+    Timeout: 600
+    
+    VpcConfig:
+      SecurityGroupIds:
+        - !Sub '{{resolve:ssm:/cielux/sg/id}}'
+      SubnetIds:
+        - !Sub '{{resolve:ssm:/cielux/subnet/public1/id}}'
+        - !Sub '{{resolve:ssm:/cielux/subnet/public2/id}}'
+    Environment:
+      Variables:
+        ENV: !Ref Env
+        AWS_SQS_QUEUE_URL: !Sub '{{resolve:ssm:/cielux-api/${Env}/sqs/mailbox-queue-url}}'
+        AWS_EVENTBRIDGE_BUS: !Sub '{{resolve:ssm:/cielux-api/${Env}/eventbridge/bus-name}}'
+        AWS_S3_BUCKET: !Sub '{{resolve:ssm:/cielux-api/${Env}/s3/bucket-name}}'
+        AWS_SES_SOURCE: noreply@nowhere.com
+        DRIVERCLASSNAME: org.sqlite.JDBC
+        SPRING_JPA_DATABASEPLATFORM: com.cielux.api.repository.conf.SqliteDialect
+        DATABASE_URL: jdbc:sqlite:/mnt/efs/sqlite-data:db?cache=shared
+        DATABASE_USERNAME: sa
+        DATABASE_PASSWORD: sa
+        
+        
+        JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1 -Dspring.main.lazy-initialization=true -Dspring.data.jpa.repositories.bootstrap-mode=lazy -Dspring.datasource.max-active=5 -Dspring.datasource.max-idle=1 -Dspring.datasource.min-idle=1 -Dspring.datasource.initial-size=1
+
+Parameters:
+  Env:
+    Type: String
+
+Resources:
+  FrontalServerlessRestApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      BinaryMediaTypes:
+        - "*~1*"
+
+  FrontalFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.cielux.api.ApiEventHandler::handleRequest
+      MemorySize: 2048
+      Role: !Sub '{{resolve:ssm:/cielux-api/${Env}/execution/role-arn}}'
+      FileSystemConfigs:
+        - Arn: !Sub '{{resolve:ssm:/cielux-api/${Env}/efs/access-point/arn}}'
+          LocalMountPath: /mnt/efs
+      Events:
+        ApiCall:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+            RestApiId:
+              Ref: FrontalServerlessRestApi
+
+  WorkerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.cielux.api.MailboxEventHandler::handleRequest
+      MemorySize: 1024
+      Role: !Sub '{{resolve:ssm:/cielux-api/${Env}/execution/role-arn}}'
+      FileSystemConfigs:
+        - Arn: !Sub '{{resolve:ssm:/cielux-api/${Env}/efs/access-point/arn}}'
+          LocalMountPath: /mnt/efs
+      Events:
+        AllEvents:
+          Type: SQS
+          Properties:
+            Queue: !Sub '{{resolve:ssm:/cielux-api/${Env}/sqs/mailbox-queue-arn}}'
+            BatchSize: 5
+
+  ApplicationResourceGroup:
+    Type: AWS::ResourceGroups::Group
+    Properties:
+      Name:
+        Fn::Sub: ApplicationInsights-SAM-${AWS::StackName}
+      ResourceQuery:
+        Type: CLOUDFORMATION_STACK_1_0
+  ApplicationInsightsMonitoring:
+    Type: AWS::ApplicationInsights::Application
+    Properties:
+      ResourceGroupName: !Ref ApplicationResourceGroup
+      AutoConfigurationEnabled: 'true'
+
+  ApiUrlSSM:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Join [ '', [ /cielux-api/, !Ref Env, /api/url ] ]
+      Type: String
+      Value: !Sub "https://${FrontalServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+
+Outputs:
+  ApiUrl:
+    Description: API Gateway endpoint URL
+    Value: !GetAtt ApiUrlSSM.Value
