@@ -1,0 +1,128 @@
+openapi: '3.0.2'
+info:
+  title: Cielux API 
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+tags:
+  - name: User
+paths:
+  /user:
+    get:
+      tags:
+        - "User"
+      summary: "get all users"
+      operationId: getAllUser
+      responses:
+        '200':
+          description: successfully retrieved users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+    post:
+      tags:
+        - "User"
+      summary: create  user
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        '200':
+          description: user created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  /user/{id}:
+    get:
+      tags:
+        - "User"
+      summary: get only one user
+      operationId: getUserById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id of the user to get
+          schema:
+            type: string
+            format: uuid
+      
+      
+      responses:
+        '200':
+          description: retrieved successfully the user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    put:
+        tags:
+        - "User"
+        summary: Update a user by ID
+        parameters:
+          - in: path
+            name: id
+            description: User ID
+            required: true
+            schema:
+              type: string
+              format: uuid
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        responses:
+          200:
+            description: User updated successfully
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/User"
+          404:
+            description: User not found
+
+    delete:
+      tags:
+        - "User"
+      summary: Delete a user by ID
+      parameters:
+        - in: path
+          name: id
+          description: id of the user to delete
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        204:
+          description: User deleted successfully
+        404:
+          description: User not found
+
+      
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+          
+
