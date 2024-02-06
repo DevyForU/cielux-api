@@ -14,29 +14,31 @@ import java.lang.String;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/user")
 public class UserController {
     private UserService userService;
 
-    @PostMapping("/user")
+    @PostMapping
     public User createUser(@RequestBody User user) {
         User createdUser = userService.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser).getBody();
     }
 
-    @GetMapping("/user")
+    @GetMapping
     public List<User> getAllUser() {
         return userService.getAllUser();
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     public User getUserById(@PathVariable String id) throws ChangeSetPersister.NotFoundException {
         return userService.getUserById(id);
     }
-    @PutMapping("/user/{id}")
+    @PutMapping("/{id}")
     public User updateUser(@PathVariable String id,@RequestParam String name) throws ChangeSetPersister.NotFoundException {
         return userService.updateUser(id,name);
     }
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/{id}")
+
     public void deleteUser(@PathVariable String id){
         userService.deleteUserById(id);
     }
