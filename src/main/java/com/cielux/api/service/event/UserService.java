@@ -20,22 +20,17 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User getUserById(String id) throws ChangeSetPersister.NotFoundException {
-        return userRepository.findById(id)
-                .orElseThrow(ChangeSetPersister.NotFoundException::new);
-    }
-
+    public User getUserById(Long id) throws ChangeSetPersister.NotFoundException {
+        return userRepository.findById(String.valueOf(id)).orElseThrow(ChangeSetPersister.NotFoundException::new);
     public List<User> getAllUser() {
         return userRepository.findAll();
     }
 
-    public void deleteUserById(String id) {
-        userRepository.deleteById(id);
+    public void deleteUserById(Long id) {
+        userRepository.deleteById(String.valueOf(id));
     }
-
-    public User updateUser(String id, String name) throws ChangeSetPersister.NotFoundException {
-        User user = userRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
-
+    public User updateUser(Long id, String name) throws ChangeSetPersister.NotFoundException {
+        User user = userRepository.findById(String.valueOf(id)).orElseThrow(ChangeSetPersister.NotFoundException::new);
         user.setName(name);
 
         return userRepository.save(user);
