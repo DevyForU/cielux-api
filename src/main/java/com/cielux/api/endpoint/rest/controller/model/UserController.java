@@ -30,16 +30,16 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable String id) throws ChangeSetPersister.NotFoundException {
+    public User getUserById(@PathVariable Long id) throws ChangeSetPersister.NotFoundException {
         return userService.getUserById(id);
     }
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable String id,@RequestParam String name) throws ChangeSetPersister.NotFoundException {
+    public User updateUser(@PathVariable Long id,@RequestParam String name) throws ChangeSetPersister.NotFoundException {
         return userService.updateUser(id,name);
     }
     @DeleteMapping("/{id}")
 
-    public void deleteUser(@PathVariable String id){
+    public void deleteUser(@PathVariable Long id){
         userService.deleteUserById(id);
     }
 
