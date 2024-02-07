@@ -21,8 +21,7 @@ public class UserService {
     }
 
     public User getUserById(Long id) throws ChangeSetPersister.NotFoundException {
-        return userRepository.findById(String.valueOf(id))
-                .orElseThrow(ChangeSetPersister.NotFoundException::new);
+        return userRepository.findById(String.valueOf(id)).orElseThrow(ChangeSetPersister.NotFoundException::new);
     }
 
     public List<User> getAllUser() {
@@ -32,10 +31,8 @@ public class UserService {
     public void deleteUserById(Long id) {
         userRepository.deleteById(String.valueOf(id));
     }
-
     public User updateUser(Long id, String name) throws ChangeSetPersister.NotFoundException {
         User user = userRepository.findById(String.valueOf(id)).orElseThrow(ChangeSetPersister.NotFoundException::new);
-
         user.setName(name);
 
         return userRepository.save(user);

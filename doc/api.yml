@@ -52,7 +52,9 @@ paths:
           required: true
           description: id of the user to get
           schema:
+
             type: number
+
 
       
       
@@ -73,7 +75,9 @@ paths:
             description: User ID
             required: true
             schema:
+
               type: number
+
 
         requestBody:
           required: true
@@ -103,6 +107,7 @@ paths:
           schema:
             type: number
 
+
       responses:
         204:
           description: User deleted successfully
@@ -117,6 +122,7 @@ components:
       properties:
         id:
           type: number
+
         name:
           type: string
         email:
