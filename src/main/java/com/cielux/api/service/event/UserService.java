@@ -22,6 +22,7 @@ public class UserService {
 
     public User getUserById(Long id) throws ChangeSetPersister.NotFoundException {
         return userRepository.findById(String.valueOf(id)).orElseThrow(ChangeSetPersister.NotFoundException::new);
+    }
     public List<User> getAllUser() {
         return userRepository.findAll();
     }
