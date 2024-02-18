@@ -4,11 +4,9 @@ import com.cielux.api.repository.UserRepository;
 import com.cielux.api.repository.model.File;
 import com.cielux.api.repository.model.Folder;
 import com.cielux.api.repository.model.User;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
 import lombok.AllArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
@@ -48,9 +46,8 @@ public class UserService {
   }
 
   public String getPasswordByEmail(String email) {
-    Optional<User> userOptional = userRepository.findAll().stream()
-            .filter(user -> user.getEmail().equals(email))
-            .findFirst();
+    Optional<User> userOptional =
+        userRepository.findAll().stream().filter(user -> user.getEmail().equals(email)).findFirst();
 
     return userOptional.map(User::getPassword).orElse(null);
   }

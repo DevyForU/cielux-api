@@ -39,6 +39,7 @@ public class UserController {
       return ResponseEntity.notFound().build();
     }
   }
+
   @GetMapping("/{id}")
   public ResponseEntity<User> getUserById(@PathVariable Long id) {
     try {
@@ -64,6 +65,7 @@ public class UserController {
     userService.deleteUserById(id);
     return ResponseEntity.noContent().build();
   }
+
   @GetMapping("/{userId}/files")
   public ResponseEntity<List<File>> getFilesForUser(@PathVariable Long userId) {
     List<File> files = userService.getFilesForUser(userId);
