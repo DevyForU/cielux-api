@@ -6,7 +6,6 @@ import java.sql.Timestamp;
 import javax.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.Instant;
 
 
 @Data
