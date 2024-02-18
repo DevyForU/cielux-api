@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Import;
 @SpringBootApplication
 @PojaGenerated
 @Import(CorsConf.class)
-
 public class PojaApplication {
 
   public static void main(String[] args) {
