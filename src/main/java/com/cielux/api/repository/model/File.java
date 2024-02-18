@@ -25,4 +25,7 @@ public class File implements Serializable {
   @ManyToOne
   @JoinColumn(name = "\"User_id\"", updatable = false)
   private User user;
+
+  public File(String name, String type, BigInteger size, Timestamp creationDate, Timestamp from, Folder folder) {
+  }
 }
