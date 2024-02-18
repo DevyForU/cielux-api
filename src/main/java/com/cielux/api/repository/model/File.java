@@ -28,7 +28,4 @@ public class File implements Serializable {
   @JoinColumn(name = "\"User_id\"", updatable = false)
   private User user;
 
-  public void setModificationDate() {
-    this.modification_date = Timestamp.from(Instant.now());
-  }
 }
