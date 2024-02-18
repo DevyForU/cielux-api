@@ -11,9 +11,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
+
 @Service
 @AllArgsConstructor
 public class UserService {
+
 
   private UserRepository userRepository;
 
@@ -67,4 +69,5 @@ public class UserService {
     }
     return Collections.emptyList();
   }
+
 }
