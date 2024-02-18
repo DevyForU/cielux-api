@@ -18,8 +18,6 @@ public class File implements Serializable {
 
   private String name;
   private String type;
-
-
   private BigInteger size;
   private Timestamp creation_date;
   private Timestamp modification_date;
