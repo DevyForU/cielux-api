@@ -30,4 +30,7 @@ public class Folder implements Serializable {
   private List<File> files;
   public Folder(String folderName, String s, User user) {
   }
+
+  public Folder(String folderName, String s, Long user) {
+  }
 }
