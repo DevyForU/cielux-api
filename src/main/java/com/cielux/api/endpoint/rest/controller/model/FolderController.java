@@ -18,8 +18,7 @@ public class FolderController {
     @PostMapping("/create")
 
     public Folder createFolder(@RequestParam String folderName, @RequestParam Long userId) {
-        User user = new User(); // Vous devrez obtenir l'utilisateur à partir de la couche de service ou du service utilisateur
-        return folderService.createFolder(folderName, user);
+        return folderService.createFolder(folderName, userId);
     }
 
     @DeleteMapping("/delete/{folderId}")
