@@ -7,7 +7,6 @@ import javax.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @Entity
 @Table(name = "File")
@@ -19,6 +18,8 @@ public class File implements Serializable {
 
   private String name;
   private String type;
+
+
   private BigInteger size;
   private Timestamp creation_date;
   private Timestamp modification_date;
@@ -26,5 +27,4 @@ public class File implements Serializable {
   @ManyToOne
   @JoinColumn(name = "\"User_id\"", updatable = false)
   private User user;
-
 }
