@@ -80,7 +80,6 @@ public class UserController {
     List<Folder> folders = userService.getFoldersForUser(userId);
     return ResponseEntity.ok(folders);
   }
-=======
     private UserService userService;
 
     @PostMapping
